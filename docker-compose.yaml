@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  zroxy:
+    image: zroxy
+    volumes:
+      - ./zroxy/zroxy.conf:/zroxy.conf
+      - ./zroxy/whitelist.txt:/whitelist.txt
+    restart: always
+    ports:
+      - "443:443"
+      - "80:80"
+  socks5:
+    image: serjs/go-socks5-proxy
+    restart: always
+    ports:
+      - "1080:1080"
+  dns:
+    image: jpillora/dnsmasq
+    restart: always
+    ports:
+      - "53:53/udp"
+    volumes:
+      - ./dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf:ro
+    command: "--no-daemon"
